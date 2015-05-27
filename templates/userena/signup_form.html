@@ -1,0 +1,66 @@
+{% extends "login.html" %}
+{% load i18n %}
+
+{% block contenido %}
+
+ <!-- start: REGISTER BOX -->
+			<div class="box-register">
+				<h3>Registrarse</h3>
+				<p>
+					Ingrese los datos de su cuenta a continuación:
+				</p>
+				<form class="form-register" method="post">
+                    {% csrf_token %}
+                    {% for error in form.non_field_errors %}
+                        <div class="errorHandler alert alert-danger">{{ error }}</div>
+                    {% endfor %}
+					<div class="errorHandler alert alert-danger no-display">
+						<i class="fa fa-remove-sign"></i> Ocurrio un error.
+					</div>
+					<fieldset>
+						<div class="form-group">
+                            <span class="input-icon">
+							<input type="text" class="form-control" name="username" placeholder="Nombre de usuario">
+                            {% for error in form.username.errors %}
+                                <span for="username" class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                            <i class="fa fa-user"></i> </span>
+						</div>
+						<div class="form-group">
+							<span class="input-icon">
+								<input type="email" class="form-control" name="email" placeholder="Correo Electrónico">
+                                {% for error in form.email.errors %}
+                                    <span for="username" class="text-danger">{{ error }}</span>
+                                {% endfor %}
+								<i class="fa fa-envelope"></i> </span>
+						</div>
+						<div class="form-group">
+							<span class="input-icon">
+								<input type="password" class="form-control" id="password" name="password1" placeholder="Contraseña">
+                                {% for error in form.username.password %}
+                                    <span for="username" class="text-danger">{{ error }}</span>
+                                {% endfor %}
+								<i class="fa fa-lock"></i> </span>
+						</div>
+						<div class="form-group">
+							<span class="input-icon">
+								<input type="password" class="form-control" name="password2" placeholder="Repetir Contraseña">
+                                {% for error in form.username.password2 %}
+                                    <span for="username" class="text-danger">{{ error }}</span>
+                                {% endfor %}
+								<i class="fa fa-lock"></i> </span>
+						</div>
+						<div class="form-actions">
+							<a href="/accounts/signin/" class="btn btn-light-grey go-back">
+								<i class="fa fa-circle-arrow-left"></i> Regresar
+							</a>
+							<button type="submit" class="btn btn-bricky pull-right">
+								Registrarse <i class="fa fa-arrow-circle-right"></i>
+							</button>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+			<!-- end: REGISTER BOX -->
+
+{% endblock %}

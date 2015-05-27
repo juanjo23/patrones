@@ -1,0 +1,229 @@
+{% extends "base1.html" %}
+{% load prioridad_tags %}
+
+{% block titulo %}<h1>Resultados <small>{{ cuestionario.fecha_hora }}</small></h1>{% endblock %}
+
+{% block bredcrumb %}
+    <li>
+        <a href="{% url "cuestionarios" %}">Cuestionario</a>
+    </li>
+
+    <li class="active">
+        Resultados
+    </li>
+
+{% endblock %}
+
+{% block contenido %}
+ <div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <i class="fa fa-tasks"></i>
+            Problemas detectados y patrones sugeridos
+            <div class="panel-tools">
+                <a class="btn btn-xs btn-link panel-collapse collapses" href="#">
+                </a>
+                </a>
+                <a class="btn btn-xs btn-link panel-expand" href="#">
+                    <i class="fa fa-resize-full"></i>
+                </a>
+                <a class="btn btn-xs btn-link panel-close" href="#">
+                    <i class="fa fa-times"></i>
+                </a>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="panel-group accordion-custom accordion-teal">
+            {% for problema in promedios %}
+                <div class="panel" class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collaps{{ problema.0.id }}">
+                                <i class="icon-arrow"></i>
+                                {{ problema.0 }} <span class="badge badge-{% if problema.1 < 40 %}danger{% elif problema.1 < 70 %}warning{% else %}success{% endif %}">
+                                    {% if problema.1 < 40 %}Alto{% elif problema.1 < 70 %}Medio{% else %}Bajo{% endif %}
+                                </span>
+                            </a>
+                        </h4>
+                    </div>
+                </div>
+                <div id="collaps{{ problema.0.id }}" class="panel-collapse collapse" style="height: 0px;">
+                    <div class="panel-body">
+                        <ol class="soluciones">
+                        {% for solucion in problema.0.soluciones.all %}
+
+                            <li id="{{ request.user|prioridad:solucion.modelo }}" >{{ solucion }} ({{ solucion.modelo }})<br> {{ solucion.resultado_contexto }}</li>
+                        {% endfor %}
+                        </ol>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+
+
+
+
+{% comment %}
+    <h1>Respuestas</h1>
+
+    {% for respuesta in respuestas %}
+        {{ forloop.counter }}. {{ respuesta.pregunta }} - {{ respuesta.get_respuesta_display }} -{{ respuesta.pregunta.practica.objetivo.area }}<br>
+    {% endfor %}<br/><br/>
+
+    {% for area, objetivos in areas.items %}
+        <h1>{{ area }}</h1>
+        {% for objetivo, practicas in objetivos.items %}
+            <h2>{{ objetivo }}</h2>
+            {% for practica, porcentaje in practicas.items %}
+                <h3>{{ practica.nombre }} - {{ porcentaje|floatformat }}%</h3>
+            {% endfor %}
+        {% endfor %}
+    {% endfor %}
+{% endcomment %}
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <i class="fa fa-tasks"></i>
+            Detalles de los resultados
+            <div class="panel-tools">
+                <a class="btn btn-xs btn-link panel-collapse collapses" href="#">
+                </a>
+                </a>
+                <a class="btn btn-xs btn-link panel-expand" href="#">
+                    <i class="fa fa-resize-full"></i>
+                </a>
+                <a class="btn btn-xs btn-link panel-close" href="#">
+                    <i class="fa fa-times"></i>
+                </a>
+            </div>
+        </div>
+        <div style="padding: 10px; text-align: center"><h3>Promedio General de acuerdo a las Prácticas de Ingeniería de Software {{ promedio_total|floatformat  }}%</h3></div>
+        <div class="panel-body">
+            <div class="tabbable">
+                <ul id="myTab3" class="nav nav-tabs tab-green">
+                    {% for area, objetivos in areas.items %}
+                    <li>
+                        <a href="#panel{{ area.id }}" data-toggle="tab">
+                            <i class="pink fa fa-dashboard"></i> {{ area }}
+                        </a></li>
+                    {% endfor %}
+                </ul>
+                <div class="tab-content">
+                    {% for area, objetivos in areas.items %}
+                    <div class="tab-pane active" id="panel{{ area.id }}">
+                    <div id="ap{{ area.id }}" style="text-align: center" ></div>
+                        <div class="progress progress-striped">
+                        <div id="a{{ area.id }}" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+											<span class="sr-only"> 0% completado</span>
+                        </div>
+						</div>
+                        {% for objetivo, practicas in objetivos.items %}
+                            <p>
+                                <h4>{{ objetivo }} <span><span class="sg" id="sg{{ objetivo.id }}"></span>%</span></h4>
+                                {% for practica, porcentaje in practicas.items %}
+                                    {{ practica.nombre }} <span><span class="sp{{ objetivo.id }}">{{ porcentaje|floatformat }}</span>%</span><br>
+                                {% endfor %}
+                            </p>
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block informacion %}
+<div id="info" class="alert alert-block alert-info fade in">
+<span><b>Descripción.</b></span><br>
+    <div id="inicio">
+            <p>En esta ventana se muestran los problemas detectados dentro de tu organización, en base a las respuestas que indicaste en el cuestionario y las características de tu empresa.</p>
+
+            <p>Las siguientes etiquetas son utilizadas para describir los problemas:</p>
+            <span class="badge badge-danger">Alto</span>: Indica que el problema está presente dentro de la organización de manera marcada.</li><br>
+            <span class="badge badge-warning">Medio</span>: Indica que el problema está presente dentro de la organización de manera moderada.</li><br>
+            <span class="badge badge-success">Bajo</span>: Indica que el problema no se presenta dentro de la organización.</li>
+    </div>
+    <div id="seleccion" style="display: none">
+        <p>Las soluciones a los problemas son mostradas con prioridad de acuerdo a las características de tu organización.</p>
+        <p>Dichas soluciones son numeradas, siendo la número uno la que mayor se adecua a tu organización, la cual te guía para mejorar el problema indicado dentro de tu organización.</p>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block js_code %}
+
+
+    // $("#0").remove();
+
+    $( ".soluciones" ).each(function( index ) {
+        var elems = $(this).children('li').remove();
+        elems.sort(function(a,b){
+            return parseInt(a.id) > parseInt(b.id);
+        });
+        $(this).append(elems);
+    });
+
+
+
+    {% for area, objetivos in areas.items %}
+         var area{{ area.id }} = 0;
+        var total_objetivos{{ area.id }} = 0;
+        {% for objetivo, practicas in objetivos.items %}
+            var total{{ objetivo.id }} = 0;
+            var elementos{{ objetivo.id }} = 0;
+            $(".sp{{ objetivo.id }}").each(function() {
+                total{{ objetivo.id }} += parseFloat($(this).text());
+                elementos{{ objetivo.id }}++;
+                // $(this).parent().css("background-color", color(parseFloat($(this).text())));
+                $(this).parent().addClass("badge").addClass("badge-" + color(parseFloat($(this).text())));
+            });
+
+            area{{ area.id }} += total{{ objetivo.id }}/elementos{{ objetivo.id }};
+            $("#sg{{ objetivo.id }}").text((total{{ objetivo.id }}/elementos{{ objetivo.id }}).toFixed(1));
+            $("#sg{{ objetivo.id }}").parent().addClass("label").addClass("label-" + color((total{{ objetivo.id }}/elementos{{ objetivo.id }}).toFixed(1)));
+
+            total_objetivos{{ area.id }}++;
+        {% endfor %}
+
+        $("#a{{ area.id }}").css("width", (area{{ area.id }}/total_objetivos{{ area.id }}).toFixed(1) + "%" );
+        $("#a{{ area.id }}").html('<span class="sr-only">'+(area{{ area.id }}/total_objetivos{{ area.id }}).toFixed(1)+'% completado</span>');
+        $("#ap{{ area.id }}").html('{{ area }} completado en un '+(area{{ area.id }}/total_objetivos{{ area.id }}).toFixed(1)+'%');
+    {% endfor %}
+
+
+    function color(porcentaje){
+        if(porcentaje<40) return "danger";
+        else if(porcentaje<70) return "warning";
+        else return "success";
+    }
+
+    var ant = "";
+
+    $('.panel').on('show.bs.collapse', function () {
+        $("#inicio").toggle();
+        $("#seleccion").toggle();
+    })
+
+    $('.panel').on('hidden.bs.collapse', function () {
+        $("#inicio").toggle();
+        $("#seleccion").toggle();
+    })
+
+    $(window).scroll(function(){
+      if($(this).scrollTop()>$('#info').position().top){
+        $('#info').css({position:'fixed',top:40});
+      }else{
+        $('#info').css({position:'relative',width:"225" });
+      }
+
+    });
+
+{% endblock %}

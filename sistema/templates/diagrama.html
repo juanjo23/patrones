@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/joint.min.css" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/autolayout.css" />
+</head>
+<body>
+{{ comando }}
+<div id="paper"></div>
+</body>
+<script type="text/javascript" src="{{ STATIC_URL }}js/joint.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/joint.layout.DirectedGraph.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/autolayout.js"></script>
+{% comment %}<script type="text/javascript" src="{{ STATIC_URL }}js/underscore-min.js"></script> {% endcomment %}
+<script>
+    $(document).ready(function(){
+        var adjacencyList = eval("{{ comando|safe }}");
+        var cells = buildGraphFromAdjacencyList(adjacencyList);
+        graph.resetCells(cells);
+        joint.layout.DirectedGraph.layout(graph, { setLinkVertices: false });
+    });
+</script>
+</html>

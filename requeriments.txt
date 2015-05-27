@@ -1,0 +1,10 @@
+Django==1.6
+django-forms-bootstrap==3.0.1
+django-grappelli==2.6.4
+django-guardian==1.2.5
+django-userena==1.4.0
+easy-thumbnails==2.2
+html2text==2015.4.14
+Pillow==2.8.1
+six==1.9.0
+South==1.0.2
