@@ -14,13 +14,13 @@ $ cd patrones
 $ pip install -r requirements.txt
 ```
 
-Install (if you don't have any yet) a mysql database, and then execute the command:
+Install a mysql database, and then create the database patrones:
 
 ```sh
 create database patrones;
 ```
 
-Run the sentences in the file 'patrones.sql'
+Run the sentences in the file **'patrones.sql'**
 
 Sincroniza la base de datos:
 
