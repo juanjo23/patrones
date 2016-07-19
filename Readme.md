@@ -18,9 +18,10 @@ Install a mysql database, and then create the database patrones:
 
 ```sh
 create database patrones;
+use patrones;
 ```
 
-Run the sentences in the file **'patrones.sql'**
+In the MySQL console run the sentences of the file **'patrones.sql'**
 
 Sincroniza la base de datos:
 
@@ -76,3 +77,11 @@ Framework:
 Python WSGI HTTP Server:
 
 - Gunicorn (install from pip)
+
+
+**NOTA:** La guía que utilicé para poner al app en producción es: [How to install and configure django](https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-django-with-postgres-nginx-and-gunicorn), con los siguientes cambios:
+1. Cambiar la versión de django por la 1.6
+2. Utilizar mysql en lugar de postgresql
+3. Clonar este repositorio en lugar de crear uno nuevo
+4. Al configurar nginx cambiar la ubicación de static: alias /opt/myenv/static/;
+en mi caso por /opt/myenv/patrones/static/;
