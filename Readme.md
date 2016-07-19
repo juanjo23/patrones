@@ -80,8 +80,9 @@ Python WSGI HTTP Server:
 
 
 **NOTA:** La guía que utilicé para poner al app en producción es: [How to install and configure django](https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-django-with-postgres-nginx-and-gunicorn), con los siguientes cambios:
-1. Cambiar la versión de django por la 1.6
-2. Utilizar mysql en lugar de postgresql
-3. Clonar este repositorio en lugar de crear uno nuevo
-4. Al configurar nginx cambiar la ubicación de static: alias /opt/myenv/static/;
+
+  1. Cambiar la versión de django por la 1.6
+  2. Utilizar mysql en lugar de postgresql
+  3. En lugar de crear un nuevo proyecto clonar este repositorio
+  4. Al configurar nginx cambiar la ubicación de static: alias /opt/myenv/static/;
 en mi caso por /opt/myenv/patrones/static/;
