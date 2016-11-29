@@ -79,6 +79,7 @@ Python WSGI HTTP Server:
 - Gunicorn (install from pip)
 
 
+## Hacer deploy de la app para producción:
 **NOTA:** La guía que utilicé para poner al app en producción es: [How to install and configure django](https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-django-with-postgres-nginx-and-gunicorn), con los siguientes cambios:
 
   1. Cambiar la versión de django por la 1.6
